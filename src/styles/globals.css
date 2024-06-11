@@ -7,16 +7,6 @@
   src: url("/fonts/Minecraft-Regular.otf") format("opentype");
 }
 
-@font-face {
-  font-family: Minecrafter;
-  src: url("/fonts/Minecrafter.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Minecrafter-Cracked;
-  src: url("/fonts/Minecrafter-Cracked.ttf") format("truetype");
-}
-
 :root {
   --inv-background: #c6c6c6;
   --slot-background: #8b8b8b;
@@ -87,12 +77,6 @@ body {
   text-shadow: 2px 2px var(--button-text-shadow);
   box-shadow: inset -2px -4px var(--button-text-inset-dark),
     inset 2px 2px var(--button-active-inset-light);
-}
-
-h1 {
-  /* font-size: 3em; */
-  font-size: min(3em, 10vw);
-  font-family: Minecrafter-Cracked;
 }
 
 h2 {
