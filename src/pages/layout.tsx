@@ -1,11 +1,22 @@
 import MCButton from "@/components/MCButton.component";
 import { useGlobal } from "@/context/Global/context";
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useEffect } from "react";
 
 export default function Layout({ children }: any) {
   const { setCursorItem, userId, setOptions, resetGame } = useGlobal();
   
+  useEffect(() => {
+    const callback = (ev: MouseEvent) => {
+      if ( ev.target !== null ) {
+        const target = ev.target as HTMLElement;
+        target.getAttribute("data-slot") !== "slot" && setCursorItem(null);
+      }
+    }
+    document.addEventListener("click", callback);
+    return () => document.removeEventListener("click", callback);
+  })
+
   return (
     <div
       onClick={(e) => {
