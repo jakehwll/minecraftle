@@ -23,6 +23,6 @@ export default function Cursor() {
         ...cursorPosition,
         backgroundImage: backgroundItem,
       }}
-    ></div>
+    />
   );
 }

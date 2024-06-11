@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Slot from "./Slot.component";
 import { useGlobal } from "@/context/Global/context";
 import {
@@ -99,13 +99,13 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
       const newCraftingTables = [...old];
       newCraftingTables.pop();
       newCraftingTables.push([
-        [undefined, undefined, undefined],
-        [undefined, undefined, undefined],
-        [undefined, undefined, undefined],
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
       ]);
       return newCraftingTables;
     });
-    setCursorItem(undefined);
+    setCursorItem(null);
   };
 
   return (
@@ -119,10 +119,12 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
               item={ingredient}
               onClick={() => {
                 setCursorItem(
-                  ingredient !== cursorItem ? ingredient : undefined
+                  ingredient !== cursorItem ? ingredient : null
                 );
               }}
-              backgroundColor={COLOR_MAP[invBackgrounds[ingredient] ?? 0]}
+              style={{
+                backgroundColor: COLOR_MAP[invBackgrounds[ingredient] ?? 0]
+              }}
               clickable
             />
           ))}

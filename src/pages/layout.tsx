@@ -18,14 +18,12 @@ export default function Layout({ children }: any) {
   })
 
   return (
-    <div
-      onClick={(e) => {
-        setCursorItem(undefined);
-      }}
-    >
+    <div>
       <div className="flex flex-col gap-4 max-w-xl m-auto">
         <header>
-          <h1 className="text-center m-0 p-2 text-5xl">MINECRAFTLE</h1>
+          <h1 className="text-center m-0 p-2 text-5xl">
+            Minecraftle
+          </h1>
           <nav>
             <div className="flex flex-col gap-2">
               <div className="flex justify-evenly gap-4">
