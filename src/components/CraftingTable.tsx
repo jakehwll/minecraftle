@@ -1,7 +1,7 @@
 import { COLORS, HICONTRAST_COLORS } from "@/constants";
 import { useGlobal } from "@/context/Global/context";
 import { ColorTable } from "@/types";
-import { useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import Slot from "./Slot";
 import classes from "./CraftingTable.module.css";
 import cc from "classcat";
@@ -167,8 +167,10 @@ export default function CraftingTable({
   return (
     <>
       <div
-        className={cc(["flex box justify-between items-center w-[22rem]", classes.root])}
-        onClick={(e: any) => e.stopPropagation()}
+        className={cc([
+          "flex box justify-between items-center w-[22rem]",
+          classes.root,
+        ])}
       >
         <div className="w-36 h-36 flex flex-wrap">
           {currentTable.map((row, rowIndex) => (

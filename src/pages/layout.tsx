@@ -6,7 +6,9 @@ import { useEffect } from "react";
 import Image from "next/image";
 import minecraftle_logo from "../../public/minecraftle_logo.png";
 
-export default function Layout({ children }: any) {
+export default function Layout({ children }: {
+  children?: React.ReactNode;
+}) {
   const { setCursorItem, userId, setOptions, resetGame } = useGlobal();
   
   useEffect(() => {
