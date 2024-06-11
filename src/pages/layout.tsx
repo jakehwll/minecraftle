@@ -5,19 +5,7 @@ import { useState, useRef } from "react";
 
 export default function Layout({ children }: any) {
   const { setCursorItem, userId, setOptions, resetGame } = useGlobal();
-  // const [isPlaying, setIsPlaying] = useState(false);
-  // const audioToPlay = useRef<HTMLAudioElement>();
-  // const playMusic = () => {
-  //   if (isPlaying) {
-  //     audioToPlay.current?.pause();
-  //   } else {
-  //     audioToPlay.current = new Audio(
-  //       "/audio/C418 - Aria Math (Minecraft Volume Beta).mp3"
-  //     );
-  //     audioToPlay.current.play();
-  //   }
-  //   setIsPlaying((o) => !o);
-  // };
+  
   return (
     <div
       onClick={(e) => {
