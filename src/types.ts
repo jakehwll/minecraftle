@@ -5,7 +5,7 @@ export type GenericApiError = {
   details?: any;
 };
 
-export type TableItem = string | null
+export type TableItem = string | null | number
 export type Row = [TableItem, TableItem, TableItem];
 export type Table = [Row, Row, Row];
 
