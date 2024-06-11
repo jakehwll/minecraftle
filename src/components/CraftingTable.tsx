@@ -20,7 +20,6 @@ export default function CraftingTable({
     setCursorItem,
     setCraftingTables,
     craftingTables,
-    checkAllVariants,
     solution,
     trimVariants,
     colorTables,
@@ -29,6 +28,7 @@ export default function CraftingTable({
     recipes,
     remainingSolutionVariants,
     options: { highContrast },
+    checkAllVariants,
   } = useGlobal();
 
   const [currentRecipe, setCurrentRecipe] = useState<string | undefined>();
@@ -169,6 +169,11 @@ export default function CraftingTable({
     }
   })
 
+  useEffect(() => {
+    const result = checkAllVariants(currentTable);
+    setCurrentRecipe(result);
+  }, [craftingTables])
+
   return (
     <>
       <div
@@ -211,14 +216,6 @@ export default function CraftingTable({
                       });
                       setCursorItem(null);
                     }
-
-                    // setCraftingTables(() => {
-                    //   const newCraftingTables = [...craftingTables];
-                    //   newCraftingTables[tableNum][rowIndex][columnIndex] =
-                    //     cursorItem;
-                    //   return newCraftingTables;
-                    // });
-                    // setCursorItem(null);
                   }}
                   onContextMenu={() => {
                     setCraftingTables(() => {

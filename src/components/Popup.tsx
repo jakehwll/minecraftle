@@ -19,7 +19,6 @@ export default function Popup({
     solution,
     craftingTables,
     colorTables,
-    userId,
     recipes,
     items,
     options: { highContrast },
