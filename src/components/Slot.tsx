@@ -1,6 +1,7 @@
 import { useGlobal } from "@/context/Global/context";
 import { TableItem } from "@/types";
 import { ComponentProps } from "react";
+import classes from "./Slot.module.css";
 
 interface SlotProps extends ComponentProps<"div"> {
   item?: TableItem;
@@ -19,7 +20,7 @@ export default function Slot({
 
   return (
     <div
-      className="slot"
+      className={classes.root}
       onMouseEnter={() => {
         if ( !item ) return
         setCursorHoverItem(item);
@@ -27,7 +28,7 @@ export default function Slot({
       onMouseLeave={() => setCursorHoverItem(null)}
       {...props}
     >
-      <div className="slot-image" style={backgroundImage} data-slot={"slot"} />
+      <div className={classes.image} style={backgroundImage} data-slot={"slot"} />
     </div>
   );
 }

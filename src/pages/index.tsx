@@ -1,9 +1,9 @@
-import CraftingTable from "@/components/CraftingTable.component";
-import Cursor from "@/components/Cursor.component";
-import Inventory from "@/components/Inventory.component";
-import LoadingSpinner from "@/components/LoadingSpinner.component";
-import MCButton from "@/components/MCButton.component";
-import Popup from "@/components/Popup.component";
+import CraftingTable from "@/components/CraftingTable";
+import Cursor from "@/components/Cursor";
+import Inventory from "@/components/Inventory";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import MCButton from "@/components/Button";
+import Popup from "@/components/Popup";
 import { useGlobal } from "@/context/Global/context";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/router";

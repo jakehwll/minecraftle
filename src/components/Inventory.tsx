@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import Slot from "./Slot.component";
+import { useEffect, useMemo, useState } from "react";
+import Slot from "./Slot";
 import { useGlobal } from "@/context/Global/context";
 import {
   CACHE_VERSION,
@@ -7,8 +7,10 @@ import {
   HICONTRAST_COLORS,
   PUBLIC_DIR,
 } from "@/constants";
-import MCButton from "./MCButton.component";
+import MCButton from "./Button";
 import { Color } from "@/types";
+import cc from "classcat";
+import classes from "./Inventory.module.css";
 
 export default function Inventory({ guessCount }: { guessCount: number }) {
   const {
@@ -109,7 +111,12 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
   };
 
   return (
-    <div className="box inv-background max-w-[21rem] flex flex-col items-center gap-3">
+    <div
+      className={cc([
+        "box inv-background max-w-[21rem] flex flex-col items-center gap-3",
+        classes.root,
+      ])}
+    >
       <h2>Crafting Ingredients</h2>
       <div className="flex flex-wrap">
         {Object.keys(items).length > 0 &&
@@ -118,12 +125,10 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
               key={i}
               item={ingredient}
               onClick={() => {
-                setCursorItem(
-                  ingredient !== cursorItem ? ingredient : null
-                );
+                setCursorItem(ingredient !== cursorItem ? ingredient : null);
               }}
               style={{
-                backgroundColor: COLOR_MAP[invBackgrounds[ingredient] ?? 0]
+                backgroundColor: COLOR_MAP[invBackgrounds[ingredient] ?? 0],
               }}
             />
           ))}

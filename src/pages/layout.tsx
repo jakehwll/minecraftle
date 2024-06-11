@@ -1,5 +1,5 @@
-import MCButton from "@/components/MCButton.component";
-import Tooltip from "@/components/Tooltip.component";
+import MCButton from "@/components/Button";
+import Tooltip from "@/components/Tooltip";
 import { useGlobal } from "@/context/Global/context";
 import Link from "next/link";
 import { useEffect } from "react";

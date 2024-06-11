@@ -1,19 +1,19 @@
 import { COLORS, HICONTRAST_COLORS } from "@/constants";
 import { useGlobal } from "@/context/Global/context";
 import { ColorTable } from "@/types";
-import { useEffect, useRef, useState } from "react";
-import Slot from "./Slot.component";
+import { useEffect, useState } from "react";
+import Slot from "./Slot";
+import classes from "./CraftingTable.module.css";
+import cc from "classcat";
 
 export default function CraftingTable({
   solved = false,
-  active = true,
-  noBackground = false,
   tableNum = 0,
+  active = true,
 }: {
   solved?: boolean;
-  active?: boolean;
-  noBackground?: boolean;
   tableNum?: number;
+  active?: boolean;
 }) {
   const {
     cursorItem,
@@ -167,10 +167,7 @@ export default function CraftingTable({
   return (
     <>
       <div
-        className={
-          "flex box justify-between items-center w-[22rem]" +
-          (noBackground ? "" : " inv-background")
-        }
+        className={cc(["flex box justify-between items-center w-[22rem]", classes.root])}
         onClick={(e: any) => e.stopPropagation()}
       >
         <div className="w-36 h-36 flex flex-wrap">
@@ -219,9 +216,10 @@ export default function CraftingTable({
                   onContextMenu={() => {
                     setCraftingTables(() => {
                       const newCraftingTables = [...craftingTables];
-                      newCraftingTables[tableNum][rowIndex][columnIndex] = cursorItem;
+                      newCraftingTables[tableNum][rowIndex][columnIndex] =
+                        cursorItem;
                       return newCraftingTables;
-                    })
+                    });
                   }}
                   data-slot-id={`${tableNum}-${rowIndex}-${columnIndex}`}
                 />

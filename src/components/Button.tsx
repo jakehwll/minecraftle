@@ -1,3 +1,6 @@
+import cc from "classcat";
+import classes from "./Button.module.css"
+
 export default function MCButton(props: {
   children: React.ReactNode;
   className?: string;
@@ -10,10 +13,10 @@ export default function MCButton(props: {
   };
   return (
     <div
-      className={"mc-button hover:cursor-pointer " + props.className}
+      className={cc([classes.root, "hover:cursor-pointer", props.className])}
       onClick={() => onClickWithSound()}
     >
-      <div className="title">{props.children}</div>
+      <div className={classes.title}>{props.children}</div>
     </div>
   );
 }

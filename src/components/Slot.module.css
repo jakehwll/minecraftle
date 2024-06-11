@@ -1,0 +1,24 @@
+.root {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    background-color: var(--slot-background);
+    box-shadow: inset 2px 2px 0px var(--slot-shadow),
+        inset -2px -2px 0px var(--slot-inset);
+}
+
+.root:hover {
+    background-color: var(--slot-background-hover);
+}
+
+.image {
+    margin: auto;
+    width: 2.5rem;
+    height: 2.5rem;
+    image-rendering: pixelated;
+    /* image-rendering: auto; */
+    background-size: contain;
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
