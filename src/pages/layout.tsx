@@ -3,6 +3,8 @@ import Tooltip from "@/components/Tooltip.component";
 import { useGlobal } from "@/context/Global/context";
 import Link from "next/link";
 import { useEffect } from "react";
+import Image from "next/image";
+import minecraftle_logo from "../../public/minecraftle_logo.png";
 
 export default function Layout({ children }: any) {
   const { setCursorItem, userId, setOptions, resetGame } = useGlobal();
@@ -21,10 +23,14 @@ export default function Layout({ children }: any) {
   return (
     <div>
       <div className="flex flex-col gap-4 max-w-xl m-auto">
-        <header>
-          <h1 className="text-center m-0 p-2 text-5xl">
-            Minecraftle
-          </h1>
+        <header className={"flex flex-col gap-4"}>
+          <div className={"flex items-center justify-center"}>
+            <Image
+              src={minecraftle_logo}
+              alt="Minecraftle Logo"
+              className={"w-96"}
+            />
+          </div>
           <Tooltip />
           <nav>
             <div className="flex flex-col gap-2">
