@@ -117,7 +117,7 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
         classes.root,
       ])}
     >
-      <h2>Crafting Ingredients</h2>
+      <h2 className={"text-xl"}>Crafting Ingredients</h2>
       <div className="flex flex-wrap">
         {Object.keys(items).length > 0 &&
           givenIngredients.map((ingredient, i) => (

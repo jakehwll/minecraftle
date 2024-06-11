@@ -4,7 +4,7 @@ export default function HowToPlay() {
   return (
     <main>
       <div className="box inv-background">
-        <h2 className="text-center">How To Play</h2>
+        <h2 className="text-center text-2xl">How To Play</h2>
         <p className="text-center font-bold">
           Your goal is to try to craft the secret item from the ingredients in
           your inventory:

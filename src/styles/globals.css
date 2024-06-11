@@ -26,26 +26,11 @@
   --button-active-text-inset-light: #fff5;
 }
 
-
 body {
-    background-image: url("/images/dirt-background.webp");
-    margin: 1rem;
-    font-family: Minecraft-Regular;
+  background-image: url("/images/dirt-background.webp");
+  margin: 1rem;
 }
 
-h2 {
-  font-size: min(1.5em, 10vw);
-  font-family: Minecraft-Regular;
-  font-weight: bold;
-}
-
-p {
-  font-family: Minecraft-Regular;
-}
-
-header {
-  color: var(--inv-background);
-}
 
 .box {
   padding: 1.5rem;
