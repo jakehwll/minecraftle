@@ -12,6 +12,7 @@ import { Color } from "@/types";
 
 export default function Inventory({ guessCount }: { guessCount: number }) {
   const {
+    cursorItem,
     setCursorItem,
     craftingTables,
     setCraftingTables,
@@ -104,19 +105,11 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
       ]);
       return newCraftingTables;
     });
-    setCursor(undefined);
-  };
-
-  const setCursor = (ingredient?: string) => {
-    // setTimeout hack to prevent cursor item changing before mouse movement is registered
-    setTimeout(() => setCursorItem(ingredient), 0);
+    setCursorItem(undefined);
   };
 
   return (
-    <div
-      className="box inv-background max-w-[21rem] flex flex-col items-center gap-3"
-      onClick={(e: any) => e.stopPropagation()}
-    >
+    <div className="box inv-background max-w-[21rem] flex flex-col items-center gap-3">
       <h2>Crafting Ingredients</h2>
       <div className="flex flex-wrap">
         {Object.keys(items).length > 0 &&
@@ -124,7 +117,11 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
             <Slot
               key={i}
               item={ingredient}
-              onClick={() => setCursor(ingredient)}
+              onClick={() => {
+                setCursorItem(
+                  ingredient !== cursorItem ? ingredient : undefined
+                );
+              }}
               backgroundColor={COLOR_MAP[invBackgrounds[ingredient] ?? 0]}
               clickable
             />
