@@ -10,7 +10,7 @@ export default function Slot({
   item,
   ...props
 }: SlotProps) {
-  const { items } = useGlobal();
+  const { items, setCursorHoverItem } = useGlobal();
   const itemImage = item ? items[item]?.icon : undefined;
 
   const backgroundImage = itemImage
@@ -18,12 +18,16 @@ export default function Slot({
     : {};
 
   return (
-    <div className="slot" {...props}>
-      <div
-        className="slot-image"
-        style={backgroundImage}
-        data-slot={"slot"}
-      />
+    <div
+      className="slot"
+      onMouseEnter={() => {
+        if ( !item ) return
+        setCursorHoverItem(item);
+      }}
+      onMouseLeave={() => setCursorHoverItem(null)}
+      {...props}
+    >
+      <div className="slot-image" style={backgroundImage} data-slot={"slot"} />
     </div>
   );
 }

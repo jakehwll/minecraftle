@@ -22,12 +22,13 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [gameState, setGameState] = useState<GameState>("inprogress");
   const [solution, setSolution] = useState<string>("stick");
   const [items, setItems] = useState<ItemMap>({});
-  const [cursorItem, setCursorItem] = useState<TableItem>(undefined);
+  const [cursorItem, setCursorItem] = useState<TableItem>(null);
+  const [cursorHoverItem, setCursorHoverItem] = useState<TableItem>(null);
   const [craftingTables, setCraftingTables] = useState<Table[]>([
     [
-      [undefined, undefined, undefined],
-      [undefined, undefined, undefined],
-      [undefined, undefined, undefined],
+      [null, null, null],
+      [null, null, null],
+      [null, null, null],
     ],
   ]);
   const [colorTables, setColorTables] = useState<ColorTable[]>([
@@ -72,15 +73,15 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       generateSetPuzzle(newDate);
     }
 
-    setCursorItem(undefined);
+    setCursorItem(null);
     setCraftingTables([]);
     setTimeout(
       () =>
         setCraftingTables([
           [
-            [undefined, undefined, undefined],
-            [undefined, undefined, undefined],
-            [undefined, undefined, undefined],
+            [null, null, null],
+            [null, null, null],
+            [null, null, null],
           ],
         ]),
       250
@@ -377,6 +378,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       items,
       cursorItem,
       setCursorItem,
+      cursorHoverItem,
+      setCursorHoverItem,
       craftingTables,
       setCraftingTables,
       colorTables,
@@ -399,6 +402,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       items,
       cursorItem,
       setCursorItem,
+      cursorHoverItem,
+      setCursorHoverItem,
       craftingTables,
       setCraftingTables,
       recipes,

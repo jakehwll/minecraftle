@@ -79,6 +79,5 @@ export function compareTables(
     }
   }
 
-  // console.log([matchmap, matchcount, isFullMatch]);
   return [matchmap, matchcount, isFullMatch];
 }

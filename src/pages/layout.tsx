@@ -1,4 +1,5 @@
 import MCButton from "@/components/MCButton.component";
+import Tooltip from "@/components/Tooltip.component";
 import { useGlobal } from "@/context/Global/context";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -24,6 +25,7 @@ export default function Layout({ children }: any) {
           <h1 className="text-center m-0 p-2 text-5xl">
             Minecraftle
           </h1>
+          <Tooltip />
           <nav>
             <div className="flex flex-col gap-2">
               <div className="flex justify-evenly gap-4">

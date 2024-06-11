@@ -125,7 +125,6 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
               style={{
                 backgroundColor: COLOR_MAP[invBackgrounds[ingredient] ?? 0]
               }}
-              clickable
             />
           ))}
       </div>

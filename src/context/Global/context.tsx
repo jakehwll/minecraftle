@@ -17,6 +17,8 @@ export type GlobalContextProps = {
   items: ItemMap;
   cursorItem: TableItem;
   setCursorItem: Dispatch<SetStateAction<TableItem>>;
+  cursorHoverItem: TableItem;
+  setCursorHoverItem: Dispatch<SetStateAction<TableItem>>;
   craftingTables: Table[];
   setCraftingTables: Dispatch<SetStateAction<Table[]>>;
   colorTables: ColorTable[];
@@ -37,8 +39,10 @@ const GlobalContext = createContext<GlobalContextProps>({
   userId: "",
   solution: "stick",
   items: {},
-  cursorItem: undefined,
+  cursorItem: null,
   setCursorItem: () => {},
+  cursorHoverItem: null,
+  setCursorHoverItem: () => {},
   craftingTables: [],
   setCraftingTables: () => {},
   colorTables: [],
