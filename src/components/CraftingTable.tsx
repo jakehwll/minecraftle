@@ -126,7 +126,12 @@ export default function CraftingTable({
   };
 
   useEffect(() => {
-    const callback = (ev: MouseEvent) => ev.preventDefault()
+    const callback = (ev: MouseEvent) => {
+      if ( ev.target !== null ) {
+        const target = ev.target as HTMLElement;
+        target.getAttribute("data-slot") === "slot" && ev.preventDefault();
+      }
+    }
     document.addEventListener("contextmenu", callback);
     return () => document.removeEventListener("contextmenu", callback);
   })
