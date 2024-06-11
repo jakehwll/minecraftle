@@ -40,16 +40,6 @@ export default function Layout({ children }: {
                 <Link className="flex-1" href="/how-to-play">
                   <MCButton className="flex-1">How To Play</MCButton>
                 </Link>
-
-                <Link className="flex-1" href={`/stats/${userId.toString()}`}>
-                  <MCButton>Stats</MCButton>
-                </Link>
-                {/* <div className="flex flex-1 justify-normal gap-4"> */}
-                {/* <div className="flex-1">
-                    <MCButton onClick={playMusic}>
-                      <div className="px-4">♫</div>
-                    </MCButton>
-                  </div> */}
                 <div className="flex-1">
                   <MCButton
                     onClick={() =>

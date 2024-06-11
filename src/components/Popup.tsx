@@ -120,9 +120,6 @@ export default function Popup({
                             <MCButton onClick={() => handleCopy()}>
                               {copyButtonText}
                             </MCButton>
-                            <Link href={userId ? `/stats/${userId}` : ""}>
-                              <MCButton onClick={closeModal}>Stats</MCButton>
-                            </Link>
                           </>
                         )}
                         <MCButton onClick={closeModal}>Close</MCButton>

@@ -8,12 +8,10 @@ A daily puzzle game fusing Wordle and Minecraft crafting recipes built with Next
 
 1. Clone the repo
 2. `npm install`
-3. `npx prisma db generate`
-4. Install postgres, create a database
-5. `cp .env.example .env`
-6. Update database login string
-7. `npx db prisma`
-8. `npm run dev`
+3. Install postgres, create a database
+4. `cp .env.example .env`
+5. Update database login string
+6. `npm run dev`
 
 ## Original Creators
 
