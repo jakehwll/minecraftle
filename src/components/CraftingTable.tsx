@@ -76,7 +76,7 @@ export default function CraftingTable({
   };
 
   const processGuess = () => {
-    if ( solved ) return;
+    if (solved) return;
 
     if (
       currentRecipe?.replace("minecraft:", "") ===
@@ -127,73 +127,88 @@ export default function CraftingTable({
 
   useEffect(() => {
     const callback = (ev: MouseEvent) => {
-      if ( ev.target !== null ) {
+      if (ev.target !== null) {
         const target = ev.target as HTMLElement;
         target.getAttribute("data-slot") === "slot" && ev.preventDefault();
       }
-    }
+    };
     document.addEventListener("contextmenu", callback);
     return () => document.removeEventListener("contextmenu", callback);
-  })
+  });
 
   const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
     const mouseDownCallback = (ev: MouseEvent) => {
-      if ( ev.which !== 3 ) return;
+      if (ev.which !== 3) return;
       setDragging(true);
-    }
+    };
     const mouseUpCallback = (ev: MouseEvent) => {
       if (ev.which !== 3) return;
       setDragging(false);
-    }
+    };
     document.addEventListener("mousedown", mouseDownCallback);
     document.addEventListener("mouseup", mouseUpCallback);
     return () => {
       document.removeEventListener("mousedown", mouseDownCallback);
       document.removeEventListener("mouseup", mouseUpCallback);
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
     const mouseDownCallback = (ev: MouseEvent) => {
       const target = ev.target as HTMLElement;
-      if ( ev.which === 1 ) {
+      if (ev.which === 1) {
         if (target.getAttribute("data-slot-id") === null) return;
-        const [tableNum, rowIndex, columnIndex] = target.getAttribute("data-slot-id")!.split("-").map(Number);
-        if (cursorItem === null) return;
-        setCraftingTables((old) => {
-          const newCraftingTables = [...old];
-          newCraftingTables[tableNum][rowIndex][columnIndex] = cursorItem;
-          return newCraftingTables;
-        });
-        setCursorItem(null);
+        const [tableNum, rowIndex, columnIndex] = target
+          .getAttribute("data-slot-id")!
+          .split("-")
+          .map(Number);
+        if (cursorItem !== null) {
+          setCraftingTables((old) => {
+            const newCraftingTables = [...old];
+            newCraftingTables[tableNum][rowIndex][columnIndex] = cursorItem;
+            return newCraftingTables;
+          });
+          setCursorItem(null);
+        } else {
+          if ( craftingTables[tableNum][rowIndex][columnIndex] === null ) return;
+          setCursorItem(craftingTables[tableNum][rowIndex][columnIndex]);
+          setCraftingTables((old) => {
+            const newCraftingTables = [...old];
+            newCraftingTables[tableNum][rowIndex][columnIndex] = null;
+            return newCraftingTables;
+          });
+        }
       }
-    }
+    };
     const mouseMoveCallback = (ev: MouseEvent) => {
-      if ( !dragging ) return;
+      if (!dragging) return;
       const target = ev.target as HTMLElement;
-      if ( target.getAttribute("data-slot-id") === null ) return;
-      const [tableNum, rowIndex, columnIndex] = target.getAttribute("data-slot-id")!.split("-").map(Number);
-      if ( cursorItem === null ) return;
+      if (target.getAttribute("data-slot-id") === null) return;
+      const [tableNum, rowIndex, columnIndex] = target
+        .getAttribute("data-slot-id")!
+        .split("-")
+        .map(Number);
+      if (cursorItem === null) return;
       setCraftingTables((old) => {
         const newCraftingTables = [...old];
         newCraftingTables[tableNum][rowIndex][columnIndex] = cursorItem;
         return newCraftingTables;
       });
-    }
+    };
     document.addEventListener("mousedown", mouseDownCallback);
     document.addEventListener("mousemove", mouseMoveCallback);
     return () => {
       document.removeEventListener("mousedown", mouseDownCallback);
       document.removeEventListener("mousemove", mouseMoveCallback);
-    }
-  })
+    };
+  });
 
   useEffect(() => {
     const result = checkAllVariants(currentTable);
     setCurrentRecipe(result);
-  }, [craftingTables])
+  }, [craftingTables]);
 
   return (
     <>
@@ -215,10 +230,10 @@ export default function CraftingTable({
                       COLOR_MAP[colorTable[rowIndex][columnIndex] ?? 0],
                   }}
                   onContextMenu={(event) => {
-                    event.preventDefault()
+                    event.preventDefault();
                   }}
                   moreProps={{
-                    "data-slot-id": `${tableNum}-${rowIndex}-${columnIndex}`
+                    "data-slot-id": `${tableNum}-${rowIndex}-${columnIndex}`,
                   }}
                 />
               ))}

@@ -27,6 +27,10 @@ export default function Slot({
         if ( !item ) return
         setCursorHoverItem(item);
       }}
+      onMouseMove={() => {
+        if ( !item ) return
+        setCursorHoverItem(item);
+      }}
       onMouseLeave={() => setCursorHoverItem(null)}
       {...props}
     >
