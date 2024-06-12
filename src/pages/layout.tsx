@@ -9,7 +9,7 @@ import minecraftle_logo from "../../public/minecraftle_logo.png";
 export default function Layout({ children }: {
   children?: React.ReactNode;
 }) {
-  const { setCursorItem, userId, setOptions, resetGame } = useGlobal();
+  const { setCursorItem, options, setOptions, resetGame } = useGlobal();
   
   useEffect(() => {
     const callback = (ev: MouseEvent) => {
@@ -35,34 +35,27 @@ export default function Layout({ children }: {
           </div>
           <Tooltip />
           <nav>
-            <div className="flex flex-col gap-2">
-              <div className="flex justify-evenly gap-4">
-                <Link className="flex-1" href="/how-to-play">
-                  <MCButton className="flex-1">How To Play</MCButton>
-                </Link>
-                <div className="flex-1">
-                  <MCButton
-                    onClick={() =>
-                      setOptions((o) => {
-                        return { ...o, highContrast: !o.highContrast };
-                      })
-                    }
-                  >
-                    <div className="px-4">☼</div>
-                  </MCButton>
-                </div>
-                {/* </div> */}
-              </div>
-              <div className="flex gap-4">
-                <Link className="flex-1" href="/">
-                  <MCButton onClick={() => resetGame(false)}>Daily</MCButton>
-                </Link>
-                <Link className="flex-1" href="/?random=true">
-                  <MCButton className="flex-1" onClick={() => resetGame(true)}>
-                    Random
-                  </MCButton>
-                </Link>
-              </div>
+            <div className="grid grid-cols-2 gap-y-2 gap-x-4">
+              <Link href="/how-to-play">
+                <MCButton className="flex-1">How To Play</MCButton>
+              </Link>
+              <Link href="/">
+                <MCButton onClick={() => resetGame(false)}>Daily</MCButton>
+              </Link>
+              <Link href="/?random=true">
+                <MCButton className="flex-1" onClick={() => resetGame(true)}>
+                  Random
+                </MCButton>
+              </Link>
+              <MCButton
+                onClick={() =>
+                  setOptions((o) => {
+                    return { ...o, highContrast: !o.highContrast };
+                  })
+                }
+              >
+                High Contrast: {options.highContrast ? "ON" : "OFF"}
+              </MCButton>
             </div>
           </nav>
         </header>

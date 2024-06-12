@@ -13,8 +13,12 @@
     text-align: center;
 }
 
+.root:hover {
+    border-color: #ffffff;
+}
+
 .root:hover .title {
-    background-color: var(--button-background-hover);
+    /* background-color: var(--button-background-hover); */
     text-shadow: 2px 2px var(--button-text-hover-shadow);
     color: var(--button-text-hover);
 }
