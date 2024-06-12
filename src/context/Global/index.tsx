@@ -1,11 +1,10 @@
-import { CACHE_VERSION, DEFAULT_OPTIONS, PUBLIC_DIR } from "@/constants";
+import { CACHE_VERSION, PUBLIC_DIR } from "@/constants";
 import { compareTables, getVariantsWithReflections } from "@/lib/recipe";
 import {
   ColorTable,
   GameState,
   ItemMap,
   MatchMap,
-  Options,
   RecipeMap,
   Table,
   TableItem,
@@ -16,7 +15,6 @@ import { GlobalContextProps, GlobalContextProvider } from "./context";
 
 const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState<string>("");
-  const [options, setOptions] = useState<Options>(DEFAULT_OPTIONS); // ["stick", "planks", "wood"
 
   const [gameDate, setGameDate] = useState(new Date());
   const [gameState, setGameState] = useState<GameState>("inprogress");
@@ -54,7 +52,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     getUserId();
-    getOptions();
     getItems();
     getRecipes();
   }, []);
@@ -157,21 +154,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     }
 
     setUserId(user_id);
-  };
-
-  useEffect(() => {
-    localStorage.setItem(`options`, JSON.stringify(options));
-  }, [options]);
-
-  const getOptions = () => {
-    const options = JSON.parse(
-      localStorage.getItem(`options`) ?? "{}"
-    ) as Options;
-    if (Object.keys(options).length === 0) {
-      setOptions(DEFAULT_OPTIONS);
-    } else {
-      setOptions(options);
-    }
   };
 
   const getItems = () => {
@@ -390,8 +372,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       trimVariants,
       gameState,
       setGameState,
-      options,
-      setOptions,
       resetGame,
       gameDate,
       remainingSolutionVariants,
@@ -414,8 +394,6 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       setColorTables,
       gameState,
       setGameState,
-      options,
-      setOptions,
       resetGame,
       gameDate,
       remainingSolutionVariants,

@@ -5,12 +5,15 @@ import Link from "next/link";
 import { useEffect } from "react";
 import Image from "next/image";
 import minecraftle_logo from "../../public/minecraftle_logo.png";
+import useGameOptions from "@/hooks/useGameOptions";
 
 export default function Layout({ children }: {
   children?: React.ReactNode;
 }) {
-  const { setCursorItem, options, setOptions, resetGame } = useGlobal();
+  const { setCursorItem, resetGame } = useGlobal();
   
+  const { highContrast, setHighContrast } = useGameOptions();
+
   useEffect(() => {
     const callback = (ev: MouseEvent) => {
       if ( ev.target !== null ) {
@@ -48,13 +51,9 @@ export default function Layout({ children }: {
                 </MCButton>
               </Link>
               <MCButton
-                onClick={() =>
-                  setOptions((o) => {
-                    return { ...o, highContrast: !o.highContrast };
-                  })
-                }
+                onClick={() => setHighContrast(!highContrast)}
               >
-                High Contrast: {options.highContrast ? "ON" : "OFF"}
+                High Contrast: {highContrast ? "ON" : "OFF"}
               </MCButton>
             </div>
           </nav>

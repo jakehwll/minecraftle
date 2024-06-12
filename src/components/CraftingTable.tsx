@@ -5,6 +5,7 @@ import { MouseEventHandler, useEffect, useState } from "react";
 import Slot from "./Slot";
 import classes from "./CraftingTable.module.css";
 import cc from "classcat";
+import useGameOptions from "@/hooks/useGameOptions";
 
 export default function CraftingTable({
   solved = false,
@@ -27,7 +28,6 @@ export default function CraftingTable({
     setGameState,
     recipes,
     remainingSolutionVariants,
-    options: { highContrast },
     checkAllVariants,
   } = useGlobal();
 
@@ -44,7 +44,9 @@ export default function CraftingTable({
     ? remainingSolutionVariants[0]
     : craftingTables[tableNum];
 
-  const { SUCCESS_COLOR, NEAR_SUCCESS_COLOR } = highContrast
+  const options = useGameOptions();
+
+  const { SUCCESS_COLOR, NEAR_SUCCESS_COLOR } = options.highContrast
     ? HICONTRAST_COLORS
     : COLORS;
 

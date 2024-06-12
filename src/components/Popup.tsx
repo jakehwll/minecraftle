@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Fragment, useState } from "react";
 import MCButton from "./Button";
 import CraftingTable from "@/components/CraftingTable";
+import useGameOptions from "@/hooks/useGameOptions";
 
 export default function Popup({
   isOpen,
@@ -21,11 +22,10 @@ export default function Popup({
     colorTables,
     recipes,
     items,
-    options: { highContrast },
     resetGame,
   } = useGlobal();
   const [copyButtonText, setCopyButtonText] = useState("Copy");
-  console.log("highContrast", highContrast);
+  const options = useGameOptions();
   const generateSummary = () => {
     let summaryString = `Minecraftle ${new Date().toISOString().slice(0, 10)} ${
       craftingTables.length
@@ -35,9 +35,9 @@ export default function Popup({
       for (let row of table) {
         for (let slot of row) {
           if (slot === 2) {
-            summaryString += highContrast ? "🟧" : "🟩";
+            summaryString += options.highContrast ? "🟧" : "🟩";
           } else if (slot === 3) {
-            summaryString += highContrast ? "🟦" : "🟨";
+            summaryString += options.highContrast ? "🟦" : "🟨";
           } else {
             summaryString += "⬜";
           }

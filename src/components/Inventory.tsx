@@ -11,6 +11,7 @@ import MCButton from "./Button";
 import { Color } from "@/types";
 import cc from "classcat";
 import classes from "./Inventory.module.css";
+import useGameOptions from "@/hooks/useGameOptions";
 
 export default function Inventory({ guessCount }: { guessCount: number }) {
   const {
@@ -21,7 +22,6 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
     gameState,
     colorTables,
     items,
-    options: { highContrast },
   } = useGlobal();
   const [givenIngredients, setGivenIngredients] = useState<string[]>([]);
 
@@ -67,7 +67,9 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
       }
     }, [givenIngredients, craftingTables, colorTables]) ?? {};
 
-  const { SUCCESS_COLOR, NEAR_SUCCESS_COLOR, WRONG_COLOR } = highContrast
+  const options = useGameOptions();
+
+  const { SUCCESS_COLOR, NEAR_SUCCESS_COLOR, WRONG_COLOR } = options.highContrast
     ? HICONTRAST_COLORS
     : COLORS;
 

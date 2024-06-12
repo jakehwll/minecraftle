@@ -28,8 +28,6 @@ export type GlobalContextProps = {
   checkAllVariants: (guess: Table) => string | undefined;
   gameState: GameState;
   setGameState: Dispatch<SetStateAction<GameState>>;
-  options: Options;
-  setOptions: Dispatch<SetStateAction<Options>>;
   resetGame: (isRandom: boolean) => void;
   gameDate: Date;
   remainingSolutionVariants: Table[];
@@ -56,8 +54,6 @@ const GlobalContext = createContext<GlobalContextProps>({
   checkAllVariants: () => undefined,
   gameState: "inprogress",
   setGameState: () => {},
-  options: DEFAULT_OPTIONS,
-  setOptions: () => {},
   resetGame: () => {},
   gameDate: new Date(),
   remainingSolutionVariants: [],
