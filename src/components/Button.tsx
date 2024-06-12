@@ -2,7 +2,7 @@ import cc from "classcat";
 import classes from "./Button.module.css";
 import { ComponentProps } from "react";
 
-export default function MCButton({
+export default function Button({
   onClick,
   className,
   children,

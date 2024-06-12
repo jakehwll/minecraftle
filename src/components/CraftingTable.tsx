@@ -1,6 +1,6 @@
 import { COLORS, HICONTRAST_COLORS } from "@/constants";
 import { useGlobal } from "@/context/Global/context";
-import { ColorTable, Table } from "@/types";
+import { ColorTable, GameState, Table } from "@/types";
 import { MouseEventHandler, useEffect, useState } from "react";
 import Slot from "./Slot";
 import classes from "./CraftingTable.module.css";
@@ -79,7 +79,7 @@ export default function CraftingTable({
     // Check to see if the current recipe is correct
     if (currentRecipe === recipes[solution].output) {
       setColorTables((old) => [...old, COLOR_TABLE_CORRECT]);
-      setGameState("won");
+      setGameState(GameState.Win);
       return;
     }
 
@@ -97,7 +97,7 @@ export default function CraftingTable({
       ]));
       setColorTables((colorTables) => ([...colorTables, COLOR_TABLE_EMPTY]));
     } else {
-      setGameState("lost");
+      setGameState(GameState.Lose);
     }
   };
 
@@ -170,8 +170,14 @@ export default function CraftingTable({
       
       const target = ev.target as HTMLElement;
       
-      if (target.getAttribute("data-slot-id") === null) return;
-      
+      const isDisabled =
+        // The slot is disabled
+        target.getAttribute("data-slot-disabled") === "true" ||
+        // We don't have an ID attribute.
+        target.getAttribute("data-slot-id") === null;
+
+      if (isDisabled) return;
+
       const [tableNum, rowIndex, columnIndex] = target
         .getAttribute("data-slot-id")!
         .split("-")

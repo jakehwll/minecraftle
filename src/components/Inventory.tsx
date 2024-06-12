@@ -7,8 +7,8 @@ import {
   HICONTRAST_COLORS,
   PUBLIC_DIR,
 } from "@/constants";
-import MCButton from "./Button";
-import { Color } from "@/types";
+import Button from "./Button";
+import { Color, GameState } from "@/types";
 import cc from "classcat";
 import classes from "./Inventory.module.css";
 import useGameOptions from "@/hooks/useGameOptions";
@@ -21,7 +21,6 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
     setCraftingTables,
     gameState,
     colorTables,
-    items,
   } = useGlobal();
   const [givenIngredients, setGivenIngredients] = useState<string[]>([]);
 
@@ -34,17 +33,17 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
     [craftingTables]
   );
 
-  const invBackgrounds =
+  const inventoryBackgrounds =
     useMemo(() => {
       if (givenIngredients.length > 0 && craftingTables.length > 0) {
         const newInvBackgrounds: { [key: string]: Color } = {};
-        
+
         for (let ingredient of givenIngredients) {
           newInvBackgrounds[ingredient] = -1;
         }
-        
-        if ( colorTables.length !== craftingTables.length) {
-          return {}
+
+        if (colorTables.length !== craftingTables.length) {
+          return {};
         }
 
         for (let [tableNum, table] of colorTables.entries()) {
@@ -66,16 +65,15 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
             }
           }
         }
-        
+
         return newInvBackgrounds;
       }
     }, [givenIngredients, craftingTables, colorTables]) ?? {};
 
   const options = useGameOptions();
 
-  const { SUCCESS_COLOR, NEAR_SUCCESS_COLOR, WRONG_COLOR } = options.highContrast
-    ? HICONTRAST_COLORS
-    : COLORS;
+  const { SUCCESS_COLOR, NEAR_SUCCESS_COLOR, WRONG_COLOR } =
+    options.highContrast ? HICONTRAST_COLORS : COLORS;
 
   const COLOR_MAP: { [key: number]: string | undefined } = {
     0: WRONG_COLOR,
@@ -98,14 +96,11 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
           );
         });
     } else {
-      setGivenIngredients([
-        ...storedgivenIngredients,
-        null, null, null
-      ]);
+      setGivenIngredients([...storedgivenIngredients, null, null, null]);
     }
   }, []);
 
-  const clearLastTable = () => {
+  const cleanupPreviousTable = () => {
     setCraftingTables((old) => {
       const newCraftingTables = [...old];
       newCraftingTables.pop();
@@ -120,38 +115,44 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
   };
 
   return (
-    <div
-      className={cc([
-        "inv-background max-w-[24rem]",
-        classes.root,
-      ])}
-    >
+    <article className={cc(["inv-background max-w-[24rem]", classes.root])}>
       <div className={cc(["flex flex-col gap-3", classes.inner])}>
-        <h2 className={"text-xl"}>Inventory</h2>
-        <div className="flex flex-wrap">
-          {Object.keys(items).length > 0 &&
-            givenIngredients.map((ingredient, i) => (
-              <Slot
-                key={i}
-                item={ingredient}
-                onClick={() => {
-                  setCursorItem(ingredient !== cursorItem ? ingredient : null);
-                }}
-                style={{
-                  backgroundColor: COLOR_MAP[invBackgrounds[ingredient] ?? 0],
-                }}
-              />
-            ))}
-        </div>
-        <div className="flex w-full justify-between items-center">
+        <header>
+          <h2 className={"text-xl"}>Inventory</h2>
+        </header>
+        <section className="flex flex-wrap">
+          {givenIngredients.length &&
+            givenIngredients.map((ingredient) => {
+              if (!ingredient) {
+                return <Slot key={Math.random()} />;
+              }
+
+              return (
+                <Slot
+                  key={ingredient}
+                  item={ingredient}
+                  onClick={() => {
+                    setCursorItem(
+                      ingredient !== cursorItem ? ingredient : null
+                    );
+                  }}
+                  style={{
+                    backgroundColor:
+                      COLOR_MAP[inventoryBackgrounds[ingredient] ?? 0],
+                  }}
+                />
+              );
+            })}
+        </section>
+        <footer className="flex w-full justify-between items-center">
           <div className="h-8">
-            {gameState === "inprogress" && !isTableEmpty && (
-              <MCButton onClick={clearLastTable}>Clear</MCButton>
+            {gameState === GameState.InProgress && !isTableEmpty && (
+              <Button onClick={cleanupPreviousTable}>Clear</Button>
             )}
           </div>
           <p>Guess {guessCount}/10</p>
-        </div>
+        </footer>
       </div>
-    </div>
+    </article>
   );
 }

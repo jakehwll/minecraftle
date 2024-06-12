@@ -1,15 +1,15 @@
 import { MatchMap, RawRecipe, Table } from "@/types";
 
-export function getVariantsWithReflections(solution: RawRecipe): Table[] {
-  let variants = generateVariants(solution);
+export function getVariationWithReflection(solution: RawRecipe): Table[] {
+  let variants = generateVariation(solution);
   for (let i = 0; i < solution.length; i++) {
     solution[i].reverse();
   }
-  variants = variants.concat(generateVariants(solution));
+  variants = variants.concat(generateVariation(solution));
   return variants;
 }
 
-function generateVariants(recipe: RawRecipe): Table[] {
+function generateVariation(recipe: RawRecipe): Table[] {
   let height = recipe.length;
   let width = recipe[0].length;
   let verticalVariants = 4 - recipe.length;
@@ -36,7 +36,7 @@ function generateVariants(recipe: RawRecipe): Table[] {
   return variants;
 }
 
-export function compareTables(
+export function deepCompareTables(
   table1: Table,
   table2: Table,
   matchOnly?: string | number

@@ -1,4 +1,4 @@
-import MCButton from "@/components/Button";
+import Button from "@/components/Button";
 import Tooltip from "@/components/Tooltip";
 import { useGlobal } from "@/context/Global/context";
 import Link from "next/link";
@@ -40,28 +40,28 @@ export default function Layout({ children }: {
           <nav>
             <div className="grid grid-cols-2 gap-y-2 gap-x-4">
               <Link href="/how-to-play" className={"col-span-2"}>
-                <MCButton className="flex-1">How To Play</MCButton>
+                <Button className="flex-1">How To Play</Button>
               </Link>
               <Link href="/">
-                <MCButton onClick={() => resetGame(false)}>Daily</MCButton>
+                <Button onClick={() => resetGame(false)}>Daily</Button>
               </Link>
               <Link href="/?random=true">
-                <MCButton className="flex-1">
+                <Button className="flex-1">
                   Random
-                </MCButton>
+                </Button>
               </Link>
-              <MCButton
+              <Button
                 onClick={() => setHighContrast(!highContrast)}
                 data-tooltip="Increases contrast for better visibility."
               >
                 High Contrast: {highContrast ? "ON" : "OFF"}
-              </MCButton>
-              <MCButton
+              </Button>
+              <Button
                 onClick={() => setHardMode(!hardMode)}
                 data-tooltip="You have to craft a valid recipe."
               >
                 Hard Mode: {hardMode ? "ON" : "OFF"}
-              </MCButton>
+              </Button>
             </div>
           </nav>
         </header>

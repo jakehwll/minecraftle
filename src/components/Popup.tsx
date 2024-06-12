@@ -2,7 +2,7 @@ import { useGlobal } from "@/context/Global/context";
 import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { Fragment, useState } from "react";
-import MCButton from "./Button";
+import Button from "./Button";
 import CraftingTable from "@/components/CraftingTable";
 import useGameOptions from "@/hooks/useGameOptions";
 
@@ -116,21 +116,21 @@ export default function Popup({
                       <div className="flex gap-2">
                         {!isRandom && (
                           <>
-                            <MCButton onClick={() => handleCopy()}>
+                            <Button onClick={() => handleCopy()}>
                               {copyButtonText}
-                            </MCButton>
+                            </Button>
                           </>
                         )}
-                        <MCButton onClick={closeModal}>Close</MCButton>
+                        <Button onClick={closeModal}>Close</Button>
                         {isRandom && (
-                          <MCButton
+                          <Button
                             onClick={() => {
                               closeModal();
                               resetGame(true);
                             }}
                           >
                             New Random
-                          </MCButton>
+                          </Button>
                         )}
                       </div>
                     </div>

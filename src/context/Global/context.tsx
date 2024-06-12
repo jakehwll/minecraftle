@@ -1,10 +1,8 @@
-import { DEFAULT_OPTIONS } from "@/constants";
 import {
   ColorTable,
   GameState,
   ItemMap,
   MatchMap,
-  Options,
   RecipeMap,
   Table,
   TableItem,
@@ -33,7 +31,7 @@ export type GlobalContextProps = {
 };
 
 const GlobalContext = createContext<GlobalContextProps>({
-  solution: "stick",
+  solution: "",
   items: {},
   cursorItem: null,
   setCursorItem: () => {},
@@ -50,7 +48,7 @@ const GlobalContext = createContext<GlobalContextProps>({
     [-1, -1, -1],
   ],
   checkAllVariants: () => undefined,
-  gameState: "inprogress",
+  gameState: GameState.InProgress,
   setGameState: () => {},
   resetGame: () => {},
   gameDate: new Date(),

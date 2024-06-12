@@ -1,5 +1,5 @@
 import { CACHE_VERSION, PUBLIC_DIR } from "@/constants";
-import { compareTables, getVariantsWithReflections } from "@/lib/recipe";
+import { deepCompareTables, getVariationWithReflection } from "@/lib/recipe";
 import {
   ColorTable,
   GameState,
@@ -17,7 +17,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState<string>("");
 
   const [gameDate, setGameDate] = useState(new Date());
-  const [gameState, setGameState] = useState<GameState>("inprogress");
+  const [gameState, setGameState] = useState<GameState>(GameState.InProgress);
   const [solution, setSolution] = useState<string>("stick");
   const [items, setItems] = useState<ItemMap>({});
   const [cursorItem, setCursorItem] = useState<TableItem>(null);
@@ -57,7 +57,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const resetGame = (isRandom: boolean) => {
-    setGameState("inprogress");
+    setGameState(GameState.InProgress);
     if (isRandom) {
       const randomSolution =
         Object.keys(recipes)[
@@ -97,7 +97,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       // load all item recipes with all variants
       let newAllRecipesAllVariants = { ...allRecipesAllVariants };
       for (let [key, value] of Object.entries(recipes)) {
-        newAllRecipesAllVariants[value.output] = getVariantsWithReflections(
+        newAllRecipesAllVariants[value.output] = getVariationWithReflection(
           value.input
         );
       }
@@ -127,7 +127,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       setSolution_n_items(newSolution_n_items);
 
       // include reflections
-      let solutionVariants = getVariantsWithReflections(solutionRecipe);
+      let solutionVariants = getVariationWithReflection(solutionRecipe);
       setAllSolutionVariants(solutionVariants);
       setRemainingSolutionVariants(solutionVariants);
     }
@@ -206,7 +206,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const checkAllVariants = (guess: Table): string | undefined => {
     for (let [key, recipe] of Object.entries(allRecipesAllVariants)) {
       for (let variant of recipe) {
-        let [mm, matchcount, isFullMatch] = compareTables(variant, guess);
+        let [mm, matchcount, isFullMatch] = deepCompareTables(variant, guess);
         // matchData[2] is boolean isFullMatch
         if (isFullMatch) {
           return key;
@@ -247,7 +247,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     let matchcounts: number[] = [];
 
     for (let variant of remainingSolutionVariants) {
-      let matchData = compareTables(variant, guess);
+      let matchData = deepCompareTables(variant, guess);
 
       matchmaps.push(matchData[0]);
       matchcounts.push(matchData[1]);
@@ -273,7 +273,7 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
     // Get index of max value in matchcounts
     let maxMatchesIndex = matchcounts.indexOf(Math.max(...matchcounts));
     // generate mask matchmap at this index for 2's
-    let [correctSlots, _, __] = compareTables(
+    let [correctSlots, _, __] = deepCompareTables(
       matchmaps[maxMatchesIndex],
       matchmaps[maxMatchesIndex],
       2
@@ -283,9 +283,9 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
     for (let [i, matchmap] of matchmaps.entries()) {
       // mask to only include 2's in matchmaps
-      let matchDataToCompare = compareTables(matchmap, matchmap, 2);
+      let matchDataToCompare = deepCompareTables(matchmap, matchmap, 2);
       // compare masked
-      let correctSlotOverlapData = compareTables(
+      let correctSlotOverlapData = deepCompareTables(
         correctSlots,
         matchDataToCompare[0]
       );

@@ -2,12 +2,13 @@ import CraftingTable from "@/components/CraftingTable";
 import Cursor from "@/components/Cursor";
 import Inventory from "@/components/Inventory";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import MCButton from "@/components/Button";
+import Button from "@/components/Button";
 import Popup from "@/components/Popup";
 import { useGlobal } from "@/context/Global/context";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+import { GameState } from "@/types";
 
 export default function Home() {
   const router = useRouter();
@@ -48,7 +49,7 @@ export default function Home() {
               key={index}
               tableNum={index}
               disabled={
-                gameState !== "inprogress" ||
+                gameState !== GameState.InProgress ||
                 index !== craftingTables.length - 1
               }
             />
@@ -73,8 +74,8 @@ export default function Home() {
           }}
         />
       )}
-      {gameState !== "inprogress" && (
-        <MCButton onClick={() => setPopupVisible(true)}>Show Summary</MCButton>
+      {gameState !== GameState.InProgress && (
+        <Button onClick={() => setPopupVisible(true)}>Show Summary</Button>
       )}
     </div>
   );
