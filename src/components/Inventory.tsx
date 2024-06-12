@@ -94,7 +94,10 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
           );
         });
     } else {
-      setGivenIngredients(storedgivenIngredients);
+      setGivenIngredients([
+        ...storedgivenIngredients,
+        null, null, null
+      ]);
     }
   }, []);
 
@@ -115,33 +118,35 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
   return (
     <div
       className={cc([
-        "box inv-background max-w-[21rem] flex flex-col items-center gap-3",
+        "inv-background max-w-[24rem]",
         classes.root,
       ])}
     >
-      <h2 className={"text-xl"}>Crafting Ingredients</h2>
-      <div className="flex flex-wrap">
-        {Object.keys(items).length > 0 &&
-          givenIngredients.map((ingredient, i) => (
-            <Slot
-              key={i}
-              item={ingredient}
-              onClick={() => {
-                setCursorItem(ingredient !== cursorItem ? ingredient : null);
-              }}
-              style={{
-                backgroundColor: COLOR_MAP[invBackgrounds[ingredient] ?? 0],
-              }}
-            />
-          ))}
-      </div>
-      <div className="flex w-full justify-between items-center">
-        <div className="h-8">
-          {gameState === "inprogress" && !isTableEmpty && (
-            <MCButton onClick={clearLastTable}>Clear</MCButton>
-          )}
+      <div className={cc(["flex flex-col gap-3", classes.inner])}>
+        <h2 className={"text-xl"}>Inventory</h2>
+        <div className="flex flex-wrap">
+          {Object.keys(items).length > 0 &&
+            givenIngredients.map((ingredient, i) => (
+              <Slot
+                key={i}
+                item={ingredient}
+                onClick={() => {
+                  setCursorItem(ingredient !== cursorItem ? ingredient : null);
+                }}
+                style={{
+                  backgroundColor: COLOR_MAP[invBackgrounds[ingredient] ?? 0],
+                }}
+              />
+            ))}
         </div>
-        <p>Guess {guessCount}/10</p>
+        <div className="flex w-full justify-between items-center">
+          <div className="h-8">
+            {gameState === "inprogress" && !isTableEmpty && (
+              <MCButton onClick={clearLastTable}>Clear</MCButton>
+            )}
+          </div>
+          <p>Guess {guessCount}/10</p>
+        </div>
       </div>
     </div>
   );

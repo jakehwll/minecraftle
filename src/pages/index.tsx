@@ -37,12 +37,12 @@ export default function Home() {
 
   return (
     <div
-      className={`flex max-w-lg flex-col items-center m-auto`}
+      className={`max-w-lg items-center m-auto flex flex-col gap-4`}
     >
       <Cursor />
 
       {Object.keys(recipes).length > 0 && Object.keys(items).length > 0 ? (
-        <div className="guesses" id="guesses">
+        <div className={"flex flex-col gap-2"}>
           {craftingTables.map((table, index) => (
             <CraftingTable
               key={index}
@@ -61,7 +61,9 @@ export default function Home() {
       )}
 
       <Inventory guessCount={craftingTables.length} />
+      
       <div ref={divRef}></div>
+
       {popupVisible && (
         <Popup
           isRandom={!!random}

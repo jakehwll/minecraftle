@@ -6,6 +6,8 @@ import Slot from "./Slot";
 import classes from "./CraftingTable.module.css";
 import cc from "classcat";
 import useGameOptions from "@/hooks/useGameOptions";
+import Image from "next/image";
+import arrow from "../../public/arrow.png";
 
 export default function CraftingTable({
   solved = false,
@@ -217,39 +219,44 @@ export default function CraftingTable({
     <>
       <div
         className={cc([
-          "flex box justify-between items-center w-[22rem]",
+          
           classes.root,
         ])}
       >
-        <div className="w-36 h-36 flex flex-wrap">
-          {currentTable.map((row, rowIndex) => (
-            <div className="flex" key={rowIndex}>
-              {row.map((item, columnIndex) => (
-                <Slot
-                  key={`${rowIndex}-${columnIndex}`}
-                  item={item}
-                  style={{
-                    backgroundColor:
-                      COLOR_MAP[colorTable[rowIndex][columnIndex] ?? 0],
-                  }}
-                  onContextMenu={(event) => {
-                    event.preventDefault();
-                  }}
-                  slotId={`${tableNum}-${rowIndex}-${columnIndex}`}
-                  disabled={disabled}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
+        <div className={cc(["flex justify-between items-center w-[21rem]", classes.inner])}>
+          <div className="w-36 h-36 flex flex-wrap">
+            {currentTable.map((row, rowIndex) => (
+              <div className="flex" key={rowIndex}>
+                {row.map((item, columnIndex) => (
+                  <Slot
+                    key={`${rowIndex}-${columnIndex}`}
+                    item={item}
+                    style={{
+                      backgroundColor:
+                        COLOR_MAP[colorTable[rowIndex][columnIndex] ?? 0],
+                    }}
+                    onContextMenu={(event) => {
+                      event.preventDefault();
+                    }}
+                    slotId={`${tableNum}-${rowIndex}-${columnIndex}`}
+                    disabled={disabled}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
 
-        <p className="text-5xl m-4 text-slot-background">→</p>
-        <div className="crafting-output">
-          <Slot
-            item={solved ? recipes[solution].output : currentRecipe}
-            onClick={() => !disabled && processGuess()}
-            disabled={disabled}
-          />
+          <p className="text-5xl m-4 text-slot-background">
+            <Image src={arrow} alt={""} />
+          </p>
+
+          <div className="crafting-output">
+            <Slot
+              item={solved ? recipes[solution].output : currentRecipe}
+              onClick={() => !disabled && processGuess()}
+              disabled={disabled}
+            />
+          </div>
         </div>
       </div>
     </>

@@ -1,8 +1,6 @@
 .root {
-    background: var(--inv-background);
     color: var(--slot-shadow);
-    border-radius: 3px;
-    box-shadow: 5px 5px 0px var(--slot-shadow),
-        inset 4px 4px 0px var(--slot-inset);
-    margin-bottom: 10px;
+    border: solid 8px;
+    border-image: url('/border.png') 16 fill;
+    padding: 16px;
 }
