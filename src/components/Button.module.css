@@ -34,7 +34,7 @@
 
     width: 100%;
     height: 100%;
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0.5rem 0.5rem 0.5rem;
 
     color: var(--button-text);
     text-shadow: 2px 2px var(--button-text-shadow);
