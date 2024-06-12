@@ -140,12 +140,22 @@ export default function CraftingTable({
 
   useEffect(() => {
     const mouseDownCallback = (ev: MouseEvent) => {
-      if ( ev.which !== 3 ) return;
-      setDragging(true);
+      const target = ev.target as HTMLElement;
+      if ( ev.which === 1 ) {
+        if (target.getAttribute("data-slot-id") === null) return;
+        const [tableNum, rowIndex, columnIndex] = target.getAttribute("data-slot-id")!.split("-").map(Number);
+        if (cursorItem === null) return;
+        setCraftingTables((old) => {
+          const newCraftingTables = [...old];
+          newCraftingTables[tableNum][rowIndex][columnIndex] = cursorItem;
+          return newCraftingTables;
+        });
+        setCursorItem(null);
+      }
+      setDragging(ev.which === 3);
     }
     const mouseUpCallback = (ev: MouseEvent) => {
-      if ( ev.which !== 3 ) return;
-      setDragging(false);
+      setDragging(ev.which === 3);
     }
     const mouseMoveCallback = (ev: MouseEvent) => {
       if ( !dragging ) return;
@@ -193,39 +203,12 @@ export default function CraftingTable({
                     backgroundColor:
                       COLOR_MAP[colorTable[rowIndex][columnIndex] ?? 0],
                   }}
-                  onClick={() => {
-                    const current =
-                      craftingTables[tableNum][rowIndex][columnIndex];
-                    if (cursorItem === null) {
-                      if (current === null) return;
-                      // pick up item
-                      setCraftingTables(() => {
-                        const newCraftingTables = [...craftingTables];
-                        newCraftingTables[tableNum][rowIndex][columnIndex] =
-                          null;
-                        return newCraftingTables;
-                      });
-                      setCursorItem(current);
-                    } else {
-                      // place item
-                      setCraftingTables(() => {
-                        const newCraftingTables = [...craftingTables];
-                        newCraftingTables[tableNum][rowIndex][columnIndex] =
-                          cursorItem;
-                        return newCraftingTables;
-                      });
-                      setCursorItem(null);
-                    }
+                  onContextMenu={(event) => {
+                    event.preventDefault()
                   }}
-                  onContextMenu={() => {
-                    setCraftingTables(() => {
-                      const newCraftingTables = [...craftingTables];
-                      newCraftingTables[tableNum][rowIndex][columnIndex] =
-                        cursorItem;
-                      return newCraftingTables;
-                    });
+                  moreProps={{
+                    "data-slot-id": `${tableNum}-${rowIndex}-${columnIndex}`
                   }}
-                  data-slot-id={`${tableNum}-${rowIndex}-${columnIndex}`}
                 />
               ))}
             </div>
