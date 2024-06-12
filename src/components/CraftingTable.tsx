@@ -8,6 +8,7 @@ import cc from "classcat";
 import useGameOptions from "@/hooks/useGameOptions";
 import Image from "next/image";
 import arrow from "../../public/arrow.png";
+import arrow__no_craft from "../../public/arrow_nocraft.png";
 
 export default function CraftingTable({
   solved = false,
@@ -81,6 +82,8 @@ export default function CraftingTable({
 
   const processGuess = () => {
     if (solved) return;
+
+    if (currentRecipe === undefined) return;
 
     if (
       currentRecipe?.replace("minecraft:", "") ===
@@ -177,7 +180,7 @@ export default function CraftingTable({
           });
           setCursorItem(null);
         } else {
-          if ( craftingTables[tableNum][rowIndex][columnIndex] === null ) return;
+          if (craftingTables[tableNum][rowIndex][columnIndex] === null) return;
           setCursorItem(craftingTables[tableNum][rowIndex][columnIndex]);
           setCraftingTables((old) => {
             const newCraftingTables = [...old];
@@ -215,15 +218,17 @@ export default function CraftingTable({
     setCurrentRecipe(result);
   }, [craftingTables]);
 
+  const { hardMode } = useGameOptions();
+
   return (
     <>
-      <div
-        className={cc([
-          
-          classes.root,
-        ])}
-      >
-        <div className={cc(["flex justify-between items-center w-[21rem]", classes.inner])}>
+      <div className={cc([classes.root])}>
+        <div
+          className={cc([
+            "flex justify-between items-center w-[21rem]",
+            classes.inner,
+          ])}
+        >
           <div className="w-36 h-36 flex flex-wrap">
             {currentTable.map((row, rowIndex) => (
               <div className="flex" key={rowIndex}>
@@ -247,7 +252,13 @@ export default function CraftingTable({
           </div>
 
           <p className="text-5xl m-4 text-slot-background">
-            <Image src={arrow} alt={""} />
+            {!hardMode ? (
+              <Image src={arrow} alt={""} />
+            ) : currentRecipe !== undefined ? (
+              <Image src={arrow} alt={""} />
+            ) : (
+              <Image src={arrow__no_craft} alt={""} />
+            )}
           </p>
 
           <div className="crafting-output">

@@ -1,14 +1,13 @@
 import { useGlobal } from "@/context/Global/context";
 import classes from "./Tooltip.module.css";
 import useMouse from "@/hooks/useMouse";
+import useTooltip from "@/hooks/useTooltip";
 
 export default function Tooltip() {
-  const { cursorHoverItem, cursorItem, items } = useGlobal();
+  const { value: tooltipValue } = useTooltip();
   const { x, y } = useMouse()
 
-  if ( !cursorHoverItem || cursorItem ) return null;
-
-  const itemName = items[cursorHoverItem]?.name;
+  if ( !tooltipValue ) return null;
 
   return (
     <div
@@ -18,7 +17,7 @@ export default function Tooltip() {
         top: y - 30,
       }}
     >
-      {itemName}
+      {tooltipValue}
     </div>
   );
 }

@@ -22,6 +22,8 @@ export default function Slot({
     ? { backgroundImage: `url(${itemImage})` }
     : {};
 
+  const itemName = item ? items[item].name : null;
+
   return (
     <div
       className={classes.root}
@@ -42,6 +44,7 @@ export default function Slot({
         data-slot={"slot"}
         data-slot-id={slotId}
         data-slot-disabled={disabled ? "true" : "false"}
+        data-tooltip={itemName}
       />
     </div>
   );

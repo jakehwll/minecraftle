@@ -1,22 +1,26 @@
 import cc from "classcat";
-import classes from "./Button.module.css"
+import classes from "./Button.module.css";
+import { ComponentProps } from "react";
 
-export default function MCButton(props: {
-  children: React.ReactNode;
-  className?: string;
-  onClick?: () => void;
-}) {
-  const onClickWithSound = () => {
+export default function MCButton({
+  onClick,
+  className,
+  children,
+  ...props
+}: ComponentProps<"div">) {
+  const onClickWithSound = (event: React.MouseEvent<HTMLDivElement>) => {
     const audioToPlay = new Audio("/audio/button_click.wav");
     audioToPlay.play();
-    if (props.onClick) props.onClick();
+    if (onClick) onClick(event);
   };
   return (
     <div
-      className={cc([classes.root, "hover:cursor-pointer", props.className])}
-      onClick={() => onClickWithSound()}
+      className={cc([classes.root, "hover:cursor-pointer", className])}
+      onClick={(event) => onClickWithSound(event)}
     >
-      <div className={classes.title}>{props.children}</div>
+      <div className={classes.title} {...props}>
+        {children}
+      </div>
     </div>
   );
 }

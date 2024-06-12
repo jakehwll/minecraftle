@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function HowToPlay() {
   return (
-    <main>
-      <div className="box inv-background">
+    <main className={"flex flex-col gap-4"}>
+      <div className="box inv-background flex flex-col gap-2">
         <h2 className="text-center text-2xl">How To Play</h2>
         <p className="text-center font-bold">
           Your goal is to try to craft the secret item from the ingredients in

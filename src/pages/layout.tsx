@@ -12,7 +12,7 @@ export default function Layout({ children }: {
 }) {
   const { setCursorItem, resetGame } = useGlobal();
   
-  const { highContrast, setHighContrast } = useGameOptions();
+  const { highContrast, setHighContrast, hardMode, setHardMode } = useGameOptions();
 
   useEffect(() => {
     const callback = (ev: MouseEvent) => {
@@ -39,7 +39,7 @@ export default function Layout({ children }: {
           <Tooltip />
           <nav>
             <div className="grid grid-cols-2 gap-y-2 gap-x-4">
-              <Link href="/how-to-play">
+              <Link href="/how-to-play" className={"col-span-2"}>
                 <MCButton className="flex-1">How To Play</MCButton>
               </Link>
               <Link href="/">
@@ -52,8 +52,15 @@ export default function Layout({ children }: {
               </Link>
               <MCButton
                 onClick={() => setHighContrast(!highContrast)}
+                data-tooltip="Increases contrast for better visibility."
               >
                 High Contrast: {highContrast ? "ON" : "OFF"}
+              </MCButton>
+              <MCButton
+                onClick={() => setHardMode(!hardMode)}
+                data-tooltip="You have to craft a valid recipe."
+              >
+                Hard Mode: {hardMode ? "ON" : "OFF"}
               </MCButton>
             </div>
           </nav>
