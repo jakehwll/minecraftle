@@ -46,7 +46,7 @@ export default function Layout({ children }: {
                 <MCButton onClick={() => resetGame(false)}>Daily</MCButton>
               </Link>
               <Link href="/?random=true">
-                <MCButton className="flex-1" onClick={() => resetGame(true)}>
+                <MCButton className="flex-1">
                   Random
                 </MCButton>
               </Link>
