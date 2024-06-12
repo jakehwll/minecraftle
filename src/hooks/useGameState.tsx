@@ -1,14 +1,15 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
+// TODO: Define all items as an enum.
 interface GameState {
-  boards: Array<Array<number>>;
+  
 }
 
 const useGameState = create<GameState>()(
   persist(
     (set) => ({
-      boards: [],
+      
     }),
     {
       name: "minecraftle-game-state",

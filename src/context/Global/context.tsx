@@ -12,7 +12,6 @@ import {
 import { Dispatch, SetStateAction, createContext, useContext } from "react";
 
 export type GlobalContextProps = {
-  userId: string;
   solution: string;
   items: ItemMap;
   cursorItem: TableItem;
@@ -34,7 +33,6 @@ export type GlobalContextProps = {
 };
 
 const GlobalContext = createContext<GlobalContextProps>({
-  userId: "",
   solution: "stick",
   items: {},
   cursorItem: null,
