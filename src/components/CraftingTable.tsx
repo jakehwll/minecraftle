@@ -10,11 +10,11 @@ import useGameOptions from "@/hooks/useGameOptions";
 export default function CraftingTable({
   solved = false,
   tableNum = 0,
-  active = true,
+  disabled = false,
 }: {
   solved?: boolean;
   tableNum?: number;
-  active?: boolean;
+  disabled?: boolean;
 }) {
   const {
     cursorItem,
@@ -160,6 +160,7 @@ export default function CraftingTable({
   useEffect(() => {
     const mouseDownCallback = (ev: MouseEvent) => {
       const target = ev.target as HTMLElement;
+      if (target.getAttribute("data-slot-disabled") === "true") return;
       if (ev.which === 1) {
         if (target.getAttribute("data-slot-id") === null) return;
         const [tableNum, rowIndex, columnIndex] = target
@@ -234,9 +235,8 @@ export default function CraftingTable({
                   onContextMenu={(event) => {
                     event.preventDefault();
                   }}
-                  moreProps={{
-                    "data-slot-id": `${tableNum}-${rowIndex}-${columnIndex}`,
-                  }}
+                  slotId={`${tableNum}-${rowIndex}-${columnIndex}`}
+                  disabled={disabled}
                 />
               ))}
             </div>
@@ -247,7 +247,8 @@ export default function CraftingTable({
         <div className="crafting-output">
           <Slot
             item={solved ? recipes[solution].output : currentRecipe}
-            onClick={() => processGuess()}
+            onClick={() => !disabled && processGuess()}
+            disabled={disabled}
           />
         </div>
       </div>
