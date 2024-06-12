@@ -15,7 +15,6 @@ export default function Home() {
   const {
     craftingTables,
     gameState,
-    userId,
     resetGame,
     recipes,
     gameDate,
@@ -36,49 +35,6 @@ export default function Home() {
     }
   }, [random]);
 
-  useEffect(() => {
-    if (gameState !== "inprogress") setPopupVisible(true);
-
-    if (
-      localStorage.getItem("lastGameDate") !== gameDate.toDateString() &&
-      !random
-    ) {
-      if (gameState === "won") {
-        fetch("/api/submitgame", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_id: userId,
-            attempts: craftingTables.length,
-            date: gameDate.toISOString(), // TODO make this based on the start time
-          }),
-        }).then((res) => {
-          if (res.ok) {
-            localStorage.setItem("lastGameDate", gameDate.toDateString());
-          }
-        });
-      } else if (gameState === "lost") {
-        fetch("/api/submitgame", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_id: userId,
-            attempts: 11,
-            date: gameDate.toISOString(), // make this based on the start time
-          }),
-        }).then((res) => {
-          if (res.ok) {
-            localStorage.setItem("lastGameDate", gameDate.toDateString());
-          }
-        });
-      }
-    }
-  }, [gameState]);
-
   return (
     <div
       className={`flex max-w-lg flex-col items-center m-auto`}
@@ -91,9 +47,9 @@ export default function Home() {
             <CraftingTable
               key={index}
               tableNum={index}
-              active={
-                index === craftingTables.length - 1 &&
-                gameState === "inprogress"
+              disabled={
+                gameState !== "inprogress" ||
+                index !== craftingTables.length - 1
               }
             />
           ))}
