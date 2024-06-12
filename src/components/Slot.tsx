@@ -5,12 +5,14 @@ import classes from "./Slot.module.css";
 
 interface SlotProps extends ComponentProps<"div"> {
   item?: TableItem;
-  moreProps?: any;
+  slotId?: string;
+  disabled?: boolean;
 }
 
 export default function Slot({
   item,
-  moreProps,
+  slotId,
+  disabled,
   ...props
 }: SlotProps) {
   const { items, setCursorHoverItem } = useGlobal();
@@ -24,17 +26,23 @@ export default function Slot({
     <div
       className={classes.root}
       onMouseEnter={() => {
-        if ( !item ) return
+        if (!item) return;
         setCursorHoverItem(item);
       }}
       onMouseMove={() => {
-        if ( !item ) return
+        if (!item) return;
         setCursorHoverItem(item);
       }}
       onMouseLeave={() => setCursorHoverItem(null)}
       {...props}
     >
-      <div className={classes.image} style={backgroundImage} data-slot={"slot"} {...moreProps} />
+      <div
+        className={classes.image}
+        style={backgroundImage}
+        data-slot={"slot"}
+        data-slot-id={slotId}
+        data-slot-disabled={disabled ? "true" : "false"}
+      />
     </div>
   );
 }
