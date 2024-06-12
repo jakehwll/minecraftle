@@ -140,6 +140,23 @@ export default function CraftingTable({
 
   useEffect(() => {
     const mouseDownCallback = (ev: MouseEvent) => {
+      if ( ev.which !== 3 ) return;
+      setDragging(true);
+    }
+    const mouseUpCallback = (ev: MouseEvent) => {
+      if (ev.which !== 3) return;
+      setDragging(false);
+    }
+    document.addEventListener("mousedown", mouseDownCallback);
+    document.addEventListener("mouseup", mouseUpCallback);
+    return () => {
+      document.removeEventListener("mousedown", mouseDownCallback);
+      document.removeEventListener("mouseup", mouseUpCallback);
+    }
+  }, [])
+
+  useEffect(() => {
+    const mouseDownCallback = (ev: MouseEvent) => {
       const target = ev.target as HTMLElement;
       if ( ev.which === 1 ) {
         if (target.getAttribute("data-slot-id") === null) return;
@@ -152,10 +169,6 @@ export default function CraftingTable({
         });
         setCursorItem(null);
       }
-      setDragging(ev.which === 3);
-    }
-    const mouseUpCallback = (ev: MouseEvent) => {
-      setDragging(ev.which === 3);
     }
     const mouseMoveCallback = (ev: MouseEvent) => {
       if ( !dragging ) return;
@@ -170,11 +183,9 @@ export default function CraftingTable({
       });
     }
     document.addEventListener("mousedown", mouseDownCallback);
-    document.addEventListener("mouseup", mouseUpCallback);
     document.addEventListener("mousemove", mouseMoveCallback);
     return () => {
       document.removeEventListener("mousedown", mouseDownCallback);
-      document.removeEventListener("mouseup", mouseUpCallback);
       document.removeEventListener("mousemove", mouseMoveCallback);
     }
   })
