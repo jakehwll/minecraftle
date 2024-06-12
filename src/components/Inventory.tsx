@@ -38,16 +38,19 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
     useMemo(() => {
       if (givenIngredients.length > 0 && craftingTables.length > 0) {
         const newInvBackgrounds: { [key: string]: Color } = {};
+        
         for (let ingredient of givenIngredients) {
           newInvBackgrounds[ingredient] = -1;
         }
+        
+        if ( colorTables.length !== craftingTables.length) {
+          return {}
+        }
+
         for (let [tableNum, table] of colorTables.entries()) {
           for (let [r, row] of table.entries()) {
-            for (let [c, slot] of row.entries()) {
-              if (
-                craftingTables[tableNum][r][c] !== undefined &&
-                craftingTables[tableNum][r][c] !== null
-              ) {
+            for (let [c, _slot] of row.entries()) {
+              if (craftingTables[tableNum][r][c]) {
                 const newColor = colorTables[tableNum][r][c];
                 const existingColor =
                   newInvBackgrounds[craftingTables[tableNum][r][c]!];
@@ -63,6 +66,7 @@ export default function Inventory({ guessCount }: { guessCount: number }) {
             }
           }
         }
+        
         return newInvBackgrounds;
       }
     }, [givenIngredients, craftingTables, colorTables]) ?? {};

@@ -221,6 +221,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const trimVariants = (guess: Table) => {
+    console.log(guess)
+
     let [matchmaps, matchcounts] = checkRemainingSolutionVariants(guess);
     // find remaining variants, correctSlots only has green slots
     let [remainingVariantsIndices, correctSlots] = findRemainingVariantsIndices(
@@ -250,6 +252,8 @@ const GlobalProvider = ({ children }: { children: ReactNode }) => {
       matchmaps.push(matchData[0]);
       matchcounts.push(matchData[1]);
     }
+
+    console.log([matchmaps, matchcounts])
 
     return [matchmaps, matchcounts];
   };

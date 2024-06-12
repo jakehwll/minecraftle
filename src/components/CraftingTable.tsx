@@ -1,6 +1,6 @@
 import { COLORS, HICONTRAST_COLORS } from "@/constants";
 import { useGlobal } from "@/context/Global/context";
-import { ColorTable } from "@/types";
+import { ColorTable, Table } from "@/types";
 import { MouseEventHandler, useEffect, useState } from "react";
 import Slot from "./Slot";
 import classes from "./CraftingTable.module.css";
@@ -9,6 +9,22 @@ import useGameOptions from "@/hooks/useGameOptions";
 import Image from "next/image";
 import arrow from "../../public/arrow.png";
 import arrow__no_craft from "../../public/arrow_nocraft.png";
+
+const CRAFTING_TABLE_EMPTY: Table = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null],
+];
+const COLOR_TABLE_EMPTY: ColorTable = [
+  [undefined, undefined, undefined],
+  [undefined, undefined, undefined],
+  [undefined, undefined, undefined],
+];
+const COLOR_TABLE_CORRECT: ColorTable = [
+  [2, 2, 2],
+  [2, 2, 2],
+  [2, 2, 2],
+];
 
 export default function CraftingTable({
   solved = false,
@@ -19,6 +35,9 @@ export default function CraftingTable({
   tableNum?: number;
   disabled?: boolean;
 }) {
+  const [currentRecipe, setCurrentRecipe] = useState<string | undefined>();
+  const [dragging, setDragging] = useState(false);
+
   const {
     cursorItem,
     setCursorItem,
@@ -33,125 +52,75 @@ export default function CraftingTable({
     remainingSolutionVariants,
     checkAllVariants,
   } = useGlobal();
+  const options = useGameOptions();
 
-  const [currentRecipe, setCurrentRecipe] = useState<string | undefined>();
-
-  const colorTable = solved
-    ? [
-        [undefined, undefined, undefined],
-        [undefined, undefined, undefined],
-        [undefined, undefined, undefined],
-      ]
-    : colorTables[tableNum];
+  const colorTable = solved ? COLOR_TABLE_EMPTY : colorTables[tableNum];
   const currentTable = solved
     ? remainingSolutionVariants[0]
     : craftingTables[tableNum];
-
-  const options = useGameOptions();
 
   const { SUCCESS_COLOR, NEAR_SUCCESS_COLOR } = options.highContrast
     ? HICONTRAST_COLORS
     : COLORS;
 
-  const COLOR_MAP: { [key: number]: string | undefined } = {
+  const COLOR_TABLE_MAPPING: { [key: number]: string | undefined } = {
     0: undefined,
     2: SUCCESS_COLOR,
     3: NEAR_SUCCESS_COLOR,
   };
 
-  useEffect(() => {
-    if (currentTable) {
-      for (let row of currentTable) {
-        for (let item of row) {
-          if (item) {
-            return;
-          }
-        }
-      }
-    }
-    setCurrentRecipe(undefined);
-  }, [craftingTables]);
-
-  const setColorTable = (t: ColorTable) => {
-    setColorTables((o) => {
-      let n = [...o];
-      n[tableNum] = t;
-      return n;
-    });
-  };
-
-  const processGuess = () => {
+  const submitRecipe = () => {
+    // We don't want to submit if the game is already solved
     if (solved) return;
 
-    if (currentRecipe === undefined) return;
+    // We don't want to submit if the game is in hard mode and the current recipe is invalid
+    if (currentRecipe === undefined && options.hardMode) return;
 
-    if (
-      currentRecipe?.replace("minecraft:", "") ===
-      recipes[solution].output.replace("minecraft:", "")
-    ) {
-      setColorTable([
-        [2, 2, 2],
-        [2, 2, 2],
-        [2, 2, 2],
-      ]);
-      setTimeout(() => {
-        setGameState("won");
-      }, 1000);
+    // Check to see if the current recipe is correct
+    if (currentRecipe === recipes[solution].output) {
+      setColorTables((old) => [...old, COLOR_TABLE_CORRECT]);
+      setGameState("won");
       return;
     }
 
-    // is wrong, trim the remaining solution variants
+    // If the current recipe is incorrect, we need to tell the user
+    // which slots are correct and which are incorrect
     const correctSlots = trimVariants(currentTable);
+    setColorTables((colorTables) => [...colorTables, correctSlots]);
 
-    // update colors based on matchmap
-    setColorTable(correctSlots);
-
+    // If the user has more than 10 crafting tables, they lose.
+    // Otherwise we add a new crafting table for them to try again.
     if (craftingTables.length < 10) {
-      setCraftingTables((old) => {
-        const newCraftingTables = [...old];
-        newCraftingTables.push([
-          [null, null, null],
-          [null, null, null],
-          [null, null, null],
-        ]);
-        return newCraftingTables;
-      });
-      setColorTables((old) => {
-        const newColorTables = [...old];
-        newColorTables.push([
-          [undefined, undefined, undefined],
-          [undefined, undefined, undefined],
-          [undefined, undefined, undefined],
-        ]);
-        return newColorTables;
-      });
+      setCraftingTables((craftingTables) => ([
+        ...craftingTables,
+        CRAFTING_TABLE_EMPTY,
+      ]));
+      setColorTables((colorTables) => ([...colorTables, COLOR_TABLE_EMPTY]));
     } else {
-      setTimeout(() => {
-        setGameState("lost");
-      }, 1000);
+      setGameState("lost");
     }
   };
 
+  // Prevent the context menu from appearing when right-clicking on a slot
   useEffect(() => {
-    const callback = (ev: MouseEvent) => {
-      if (ev.target !== null) {
-        const target = ev.target as HTMLElement;
-        target.getAttribute("data-slot") === "slot" && ev.preventDefault();
+    const callback = (event: MouseEvent) => {
+      if (event.target !== null) {
+        const target = event.target as HTMLElement;
+        target.getAttribute("data-slot") === "slot" && event.preventDefault();
       }
     };
     document.addEventListener("contextmenu", callback);
     return () => document.removeEventListener("contextmenu", callback);
   });
 
-  const [dragging, setDragging] = useState(false);
-
+  // Handle multi-slot dragging
   useEffect(() => {
-    const mouseDownCallback = (ev: MouseEvent) => {
-      if (ev.which !== 3) return;
+    const mouseDownCallback = (event: MouseEvent) => {
+      if (event.which !== 3) return;
       setDragging(true);
     };
-    const mouseUpCallback = (ev: MouseEvent) => {
-      if (ev.which !== 3) return;
+    const mouseUpCallback = (event: MouseEvent) => {
+      if (event.which !== 3) return;
       setDragging(false);
     };
     document.addEventListener("mousedown", mouseDownCallback);
@@ -162,67 +131,79 @@ export default function CraftingTable({
     };
   }, []);
 
+  //
   useEffect(() => {
-    const mouseDownCallback = (ev: MouseEvent) => {
-      const target = ev.target as HTMLElement;
-      if (target.getAttribute("data-slot-disabled") === "true") return;
-      if (ev.which === 1) {
+    const mouseDownCallback = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const isDisabled = target.getAttribute("data-slot-disabled") === "true";
+      
+      if (isDisabled) return;
+
+      if (event.which === 1) {
         if (target.getAttribute("data-slot-id") === null) return;
+
         const [tableNum, rowIndex, columnIndex] = target
           .getAttribute("data-slot-id")!
           .split("-")
           .map(Number);
+        
         if (cursorItem !== null) {
-          setCraftingTables((old) => {
-            const newCraftingTables = [...old];
-            newCraftingTables[tableNum][rowIndex][columnIndex] = cursorItem;
-            return newCraftingTables;
+          setCraftingTables((craftingTables) => {
+            let result = [...craftingTables];
+            result[tableNum][rowIndex][columnIndex] = cursorItem;
+            return result;
           });
           setCursorItem(null);
         } else {
           if (craftingTables[tableNum][rowIndex][columnIndex] === null) return;
           setCursorItem(craftingTables[tableNum][rowIndex][columnIndex]);
-          setCraftingTables((old) => {
-            const newCraftingTables = [...old];
-            newCraftingTables[tableNum][rowIndex][columnIndex] = null;
-            return newCraftingTables;
+          setCraftingTables((craftingTables) => {
+            let result = [...craftingTables];
+            result[tableNum][rowIndex][columnIndex] = null;
+            return result;
           });
         }
       }
     };
     const mouseMoveCallback = (ev: MouseEvent) => {
       if (!dragging) return;
+      
       const target = ev.target as HTMLElement;
+      
       if (target.getAttribute("data-slot-id") === null) return;
+      
       const [tableNum, rowIndex, columnIndex] = target
         .getAttribute("data-slot-id")!
         .split("-")
         .map(Number);
+      
       if (cursorItem === null) return;
+      
       setCraftingTables((old) => {
         const newCraftingTables = [...old];
         newCraftingTables[tableNum][rowIndex][columnIndex] = cursorItem;
         return newCraftingTables;
       });
     };
+
     document.addEventListener("mousedown", mouseDownCallback);
     document.addEventListener("mousemove", mouseMoveCallback);
+    
     return () => {
       document.removeEventListener("mousedown", mouseDownCallback);
       document.removeEventListener("mousemove", mouseMoveCallback);
     };
   });
 
-  useEffect(() => {
-    const result = checkAllVariants(currentTable);
-    setCurrentRecipe(result);
-  }, [craftingTables]);
-
-  const { hardMode } = useGameOptions();
+  // Whenever the crafting tables change, we need to check if the current recipe is valid
+  useEffect(
+    () => setCurrentRecipe(checkAllVariants(currentTable)),
+    [craftingTables]
+  );
 
   return (
     <>
-      <div className={cc([classes.root])}>
+      <div className={classes.root}>
         <div
           className={cc([
             "flex justify-between items-center w-[21rem]",
@@ -236,13 +217,15 @@ export default function CraftingTable({
                   <Slot
                     key={`${rowIndex}-${columnIndex}`}
                     item={item}
-                    style={{
-                      backgroundColor:
-                        COLOR_MAP[colorTable[rowIndex][columnIndex] ?? 0],
-                    }}
-                    onContextMenu={(event) => {
-                      event.preventDefault();
-                    }}
+                    style={
+                      {
+                        "--slot-background":
+                          COLOR_TABLE_MAPPING[
+                            colorTable[rowIndex][columnIndex] ?? 0
+                          ],
+                      } as React.CSSProperties
+                    }
+                    onContextMenu={(event) => event.preventDefault()}
                     slotId={`${tableNum}-${rowIndex}-${columnIndex}`}
                     disabled={disabled}
                   />
@@ -252,7 +235,7 @@ export default function CraftingTable({
           </div>
 
           <p className="text-5xl m-4 text-slot-background">
-            {!hardMode ? (
+            {!options.hardMode ? (
               <Image src={arrow} alt={""} />
             ) : currentRecipe !== undefined ? (
               <Image src={arrow} alt={""} />
@@ -263,8 +246,8 @@ export default function CraftingTable({
 
           <div className="crafting-output">
             <Slot
-              item={solved ? recipes[solution].output : currentRecipe}
-              onClick={() => !disabled && processGuess()}
+              item={currentRecipe}
+              onClick={() => !disabled && submitRecipe()}
               disabled={disabled}
             />
           </div>
