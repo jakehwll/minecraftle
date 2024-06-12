@@ -66,6 +66,10 @@ export default function Layout({ children }: {
           </nav>
         </header>
         <main>{children}</main>
+        <footer className={"text-sm text-center"}>
+          <p>Not an official Minecraft website.</p>
+          <p>Minecraftle is not associated with Mojang AB or Microsoft.</p>
+        </footer>
       </div>
     </div>
   );
