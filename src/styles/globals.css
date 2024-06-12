@@ -28,8 +28,9 @@
 
 body {
   background-image: url("/images/dirt-background.webp");
+  background-color: #150F0A;
   margin: 1rem;
-  color: #ddd;
+  color: #dddddd;
 }
 
 
